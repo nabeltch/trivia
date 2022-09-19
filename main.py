@@ -32,33 +32,40 @@ def get_question(question):
         for i, v in data.trivia['question ' +
                                 str(question)]['options'].items()
     ]
-    response = input('\ningrese su respuesta:\n').lower()
+    response = input(
+        '\nIngrese su respuesta: (para cancelar ingrese x/X):').lower()
     response_question(response, data, question)
 
 
 #funcion que resuelve las preguntas
 def response_question(response, data, question):
-    while response not in ('a', 'b', 'c', 'd'):
-        response = input(
-            'ingrese nuevamente, la opcion ingresada no se encuentra en la pregunta: '
-        ).lower()
+  
+        if response == 'x':
+            get_response()
+            return False
 
-    global score
-    trivia = data.trivia['question ' + str(question)]
-    if response == trivia['response']:
-        score = score * int(trivia['score'][response][1])
-        print('\n', GREEN + trivia['items_feeback'][response] + RESET, '\n')
-        continue_question(question)
-    else:
-        if trivia['score'][response][0] == '+':
-            score = score + int(trivia['score'][response][1])
-        elif trivia['score'][response][0] == '-':
-            score = score - int(trivia['score'][response][1])
+        while response not in ('a', 'b', 'c', 'd'):
+            response = input(
+                'Ingrese nuevamente, la opcion ingresada no se encuentra en la pregunta: '
+            ).lower()
+
+        global score
+        trivia = data.trivia['question ' + str(question)]
+        if response == trivia['response']:
+            score = score * int(trivia['score'][response][1])
+            print('\n', GREEN + trivia['items_feeback'][response] + RESET,
+                  '\n')
+            continue_question(question)
         else:
-            score = score / int(trivia['score'][response][1])
+            if trivia['score'][response][0] == '+':
+                score = score + int(trivia['score'][response][1])
+            elif trivia['score'][response][0] == '-':
+                score = score - int(trivia['score'][response][1])
+            else:
+                score = score / int(trivia['score'][response][1])
 
-        print('\n', RED + trivia['items_feeback'][response], RESET, '\n')
-        continue_question(question)
+            print('\n', RED + trivia['items_feeback'][response], RESET, '\n')
+            continue_question(question)
 
 
 #funcion que resuelve la contuinidad
